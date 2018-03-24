@@ -1,66 +1,43 @@
 #include "..\inc\Game.hpp"
+StateControl main_state;
 
 Game::Game() {
 	gameWindow = new sf::RenderWindow();
 	gameWindow->create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), (sf::String)WINDOW_TITLE);
 	gameState = STATE::MENU;
-	menu = nullptr;
+	main_state.SetWindow(gameWindow);
+	main_state.SwitchState(gameState);
 }
 
 void Game::Run() {
-	while (gameState != STATE::CLOSE) {
-
-		if (gameState == STATE::MENU && menu == NULL) { // если состояние игры = меню И объект не пуст
-			menu = new MenuState(this);
-		}
-
-		sf::Event event;
-		while (gameWindow->pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
-				gameState = STATE::CLOSE;
-			}
-
-			switch (gameState) {
-			case Game::MENU:
-				menu->Update(event, *gameWindow);
-				break;
-				/*/////////////*/
-			}
-
-			/*обработка нажатий*/
-		}
-
-		//updates
-		gameWindow->clear(sf::Color::Blue);
-		//gameWindow->draw();
-		if (gameState == Game::MENU) {
-			menu->Draw(*gameWindow);
-		}
-
-		gameWindow->display();
+	while (gameWindow->isOpen()) {
+		this->Update();
+		this->Draw();
 	}
-
 }
 
 Game::~Game() {
 	if (gameWindow->isOpen()) {
-		this->Exit();
+		gameWindow->close();
 	}
 	delete gameWindow;
 }
 
-void Game::Pause() {
-
-}
-
-void Game::ShowMenu() {
-	gameState = Game::MENU;
-}
-
 void Game::Update() {
+	sf::Event event;
+	while (gameWindow->pollEvent(event)) {
+		if (event.type == sf::Event::Closed) {
+			gameState = STATE::CLOSE;
+		}
 
+		main_state.Update(event);
+
+		/*обработка нажатий*/
+	}
 }
 
-void Game::Exit() {
-	gameWindow->close();
+void Game::Draw() {
+	gameWindow->clear(sf::Color::Blue);
+	main_state.Draw();
+	gameWindow->display();
 }

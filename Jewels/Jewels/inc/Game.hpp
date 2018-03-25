@@ -6,21 +6,13 @@
 #include "Resource.hpp"
 #include "MenuState.hpp"
 #include "StateControl.hpp"
-const size_t WINDOW_WIDTH = 640;
-const size_t WINDOW_HEIGHT = 480;
+const size_t WINDOW_WIDTH = 880;
+const size_t WINDOW_HEIGHT = 660;
 constexpr const char *WINDOW_TITLE = "SuperJewels!";
 
 class Game {
-public:
 	sf::RenderWindow *gameWindow;
-	STATE gameState;
-	//Menu gameMenu(&gameWindow);
-
-	/*
-	Все игровые объекты
-	+ посчитать очки и т.д
-	*/
-
+	
 public:
 	Game();
 	~Game();

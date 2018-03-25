@@ -1,39 +1,46 @@
 #include "..\inc\MenuState.hpp"
 #include "..\inc\Game.hpp"
-#include <iostream>
 
 void nop() {
 	std::cout << "$" << std::endl;
 }
 
-void MenuState::Init(sf::RenderWindow *_window) {
-	std::string titleArr[] = { "Start", "Options", "Achievements", "Information", "Exit" };
+MenuState::MenuState(sf::RenderWindow *_window) {
+	std::string titleArr[] = { "PLAY", "OPTIONS", "ACHIEVEMENTS", "INFO", "QUIT" };
 	Button temp[BTN_COUNT];
-	background = new sf::RectangleShape();
-	
-	background->setFillColor(sf::Color(150, 150, 150));
-	background->setOutlineColor(sf::Color::Blue);
-
+	menu_panel = new sf::RectangleShape();
+	menu_panel->setFillColor(sf::Color(150, 150, 150, 30));
 
 	size.x = 2 * OFFSET + temp[NULL].getSize().x;
 	size.y = OFFSET + BTN_COUNT * (BTN_SPACE + temp[NULL].getSize().y);
-	background->setSize(size);
+	menu_panel->setSize(size);
 
 	pos = sf::Vector2f((_window->getSize().x - this->size.x) / 2.0f,
-		(_window->getSize().y - this->size.y) / 2.0f);
-	background->setPosition(pos);
+		(_window->getSize().y - this->size.y) / 2.0f + 0.07f * _window->getSize().y);
+	menu_panel->setPosition(pos);
+
+
+	background = new sf::RectangleShape();
+	background->setSize(sf::Vector2f(_window->getSize().x, _window->getSize().y));
+	background->setTexture(&resMngr->textures.Get("menu_bg"));
 
 	for (int i = 0; i < BTN_COUNT; ++i) {
 		temp[i].SetText(titleArr[i]);
-		temp[i].SetTexture(resMngr->textures.Get("btn"));
+		temp[i].SetTexture(resMngr->textures.Get("menu_btn"));
 
 		float x_pos = pos.x + OFFSET;
 		float y_pos = pos.y + OFFSET + i * (BTN_SPACE + temp[0].getSize().y);
 
 		temp[i].SetPosition(x_pos, y_pos);
 		temp[i].SetFunction(nop);
-
 	}
+
+	temp[0].SetFunction([this]() { //define button 'Play'
+		main_state.SwitchState(STATE::PLAY);
+	});
+	temp[4].SetFunction([this]() { //define button 'Exit'
+		main_state.SwitchState(STATE::CLOSE);
+	});
 
 	//////////////////////
 	for (int i = 0; i < BTN_COUNT; ++i) {
@@ -43,18 +50,19 @@ void MenuState::Init(sf::RenderWindow *_window) {
 
 
 void MenuState::Update(sf::Event e, sf::RenderWindow *_window) {
-	for (auto &it = items.begin(); it != items.end(); it++) {
-		it->HandleEvent(e, *_window);
+	for (auto &it : items) {
+		it.HandleEvent(e, *_window);
 	}
-	main_state.GetState(); ///??
 }
 
 void MenuState::Destroy(sf::RenderWindow *_window) {
+	delete menu_panel;
 	delete background;
 }
 
 void MenuState::Draw(sf::RenderWindow * _window) {
 	_window->draw(*this->background);
+	_window->draw(*this->menu_panel);
 	for (auto &it = items.begin(); it != items.end(); it++) {
 		it->Draw(*_window);
 	}
@@ -62,10 +70,10 @@ void MenuState::Draw(sf::RenderWindow * _window) {
 
 void MenuState::SetPos(float x, float y) {
 	pos = sf::Vector2f(x, y);
-	background->setPosition(pos);
+	menu_panel->setPosition(pos);
 }
 
 void MenuState::SetSize(const sf::Vector2f& _size) {
 	size = _size;
-	background->setSize(size);
+	menu_panel->setSize(size);
 }

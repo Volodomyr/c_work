@@ -4,7 +4,7 @@ Form::Form() {
 	text.setCharacterSize(CHAR_SIZE);
 	text.setOutlineColor(sf::Color::Black);
 	text.setFillColor(sf::Color::White);
-	text.setFont(resMngr->fonts.Get("arial"));
+	text.setFont(resMngr->fonts.Get("domino"));
 }
 
 bool Form::isPointed(const sf::RenderWindow& window) {

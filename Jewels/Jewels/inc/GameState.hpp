@@ -9,8 +9,7 @@ class GameState: public State {
 	*/
 	sf::CircleShape *circle;
 public:
-	GameState() {}
-	void Init(sf::RenderWindow *window);
+	GameState(sf::RenderWindow *_window);
 	void Update(sf::Event e, sf::RenderWindow *window);
 	void Draw(sf::RenderWindow *window);
 	void Destroy(sf::RenderWindow *window);

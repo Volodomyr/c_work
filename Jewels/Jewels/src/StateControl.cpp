@@ -3,12 +3,14 @@
 StateControl::StateControl() {
 	window = nullptr;
 	curr_state = nullptr;
+	isGameClose = false;
 }
 
 StateControl::~StateControl() {
-	this->curr_state->Destroy(this->window);
-	delete window;
-	delete curr_state;
+	if (curr_state) {
+		this->curr_state->Destroy(this->window);
+		delete curr_state;
+	}
 }
 
 void StateControl::Destroy() {
@@ -34,29 +36,33 @@ void StateControl::SetWindow(sf::RenderWindow* _window) {
 }
 
 void StateControl::SetState(State *_state) {
+	this->Destroy();
 	if (curr_state) {
 		delete curr_state;
 	}
 	curr_state = _state;
-	this->curr_state->Init(this->window);
 }
 
 void StateControl::SwitchState(const STATE& new_state) {
+	if (new_state == STATE::CLOSE) {
+		isGameClose = true;
+		return;
+	}
+
+	//this->Destroy();
 	delete curr_state;
+	curr_state = nullptr;
+	
 
 	switch (new_state) {
 		case PLAY: 
-			curr_state = new GameState();
+			curr_state = new GameState(this->window);
 			break;
 		case PAUSE:
 			////
 			break;
 		case MENU:
-			curr_state = new MenuState();
-			break;
-		case CLOSE:
-			this->window->close();
+			curr_state = new MenuState(this->window);
 			break;
 	}
-	this->curr_state->Init(this->window);
 }

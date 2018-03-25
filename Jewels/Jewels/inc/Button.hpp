@@ -7,6 +7,9 @@
 #include <string>
 
 using func_type = std::function<void()>;
+const float M_TEXT_THICK = 2.0f;
+const size_t M_TEXT_SIZE = 25;
+
 
 enum ButtonSize {
 	Small,

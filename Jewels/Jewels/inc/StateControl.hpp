@@ -18,6 +18,7 @@ enum STATE {
 class StateControl {
 	sf::RenderWindow *window; //указатель на окно
 	State *curr_state; //указатель на текущее состо€ние
+	bool isGameClose;
 
 public:
 	StateControl();
@@ -28,6 +29,7 @@ public:
 	sf::RenderWindow* GetWindow() { return window; }
 	State& GetState() { return *curr_state; }
 
+	bool isClose() { return isGameClose == true; }
 	void SwitchState(const STATE& new_state);
 	void Draw();//функции дл€ отрисовки 
 	void Update(sf::Event& event); //обработка событий

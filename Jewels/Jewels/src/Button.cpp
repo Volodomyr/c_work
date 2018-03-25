@@ -16,7 +16,7 @@ sf::Vector2f Button::SelectSize(ButtonSize btnSize)
 		_size = { 128, 64 };
 		break;
 	case ButtonSize::Medium:
-		_size = { 256, 64 };
+		_size = { 262, 64 };
 		break;
 	case ButtonSize::Large:
 		_size = { 512, 128 };
@@ -31,6 +31,9 @@ Button::Button() {
 	this->SetFunction(nullptr);
 	rect.setFillColor(sf::Color::White);
 	rect.setSize(this->SelectSize(ButtonSize::Medium));
+	text.setOutlineColor(sf::Color(27, 120, 154));
+	text.setOutlineThickness(M_TEXT_THICK);
+	text.setCharacterSize(M_TEXT_SIZE);
 }
 
 Button::Button(const std::string& _text, const sf::Texture& _texture,
@@ -69,12 +72,12 @@ void Button::HandleEvent(sf::Event e, const sf::RenderWindow& window) {
 	if (this->isPointed(window)) {
 		if (!isSelected) {
 			isSelected = true;
-			rect.setFillColor(sf::Color(176, 226, 255)); // подстветка голубым цветом
+			text.setFillColor(sf::Color::Green); // подстветка
 		}
 	}
 	else {
 		isSelected = false;
-		rect.setFillColor(sf::Color::White);
+		text.setFillColor(sf::Color::White);
 	}
 
 	if (this->isClicked(e, window)) {

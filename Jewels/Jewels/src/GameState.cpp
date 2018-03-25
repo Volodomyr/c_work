@@ -1,6 +1,6 @@
 #include "..\inc\GameState.hpp"
 
-void GameState::Init(sf::RenderWindow *window) {
+GameState::GameState(sf::RenderWindow *_window) {
 	circle = new sf::CircleShape(200.0f);
 	circle->setFillColor(sf::Color::Red);
 }

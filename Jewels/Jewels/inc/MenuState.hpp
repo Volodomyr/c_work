@@ -7,6 +7,7 @@
 #include "Button.hpp"
 #include "State.hpp"
 #include "StateControl.hpp"
+#include <iostream>
 
 enum Item { START, OPTIONS, ACHIEVEMENTS, INFORMATION, EXIT };
 const size_t BTN_COUNT = 5; //количество кнопок
@@ -15,14 +16,14 @@ const size_t OFFSET = 20;
 
 
 class MenuState: public State {
+	sf::RectangleShape *menu_panel;
 	sf::RectangleShape *background;
 	sf::Vector2f pos;
 	sf::Vector2f size;
 	std::list<Button> items;
 
 public:
-	MenuState() {}
-	void Init(sf::RenderWindow *_window);
+	MenuState(sf::RenderWindow *_window);
 	void Update(sf::Event e, sf::RenderWindow *_window);
 	void Destroy(sf::RenderWindow *_window);
 	void Draw(sf::RenderWindow *_window);

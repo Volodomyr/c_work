@@ -1,18 +1,18 @@
 #include "..\inc\GameState.hpp"
 
-GameState::GameState(sf::RenderWindow *_window) {
-	circle = new sf::CircleShape(200.0f);
-	circle->setFillColor(sf::Color::Red);
+GameState::GameState(sf::RenderWindow& _window) {
+	box = new Box;
+	box->SetPosition(200, 200);
 }
 
-void GameState::Update(sf::Event e, sf::RenderWindow *window) {
+void GameState::Update(sf::Event e, sf::RenderWindow& window, float time) {
 
 }
 
-void GameState::Draw(sf::RenderWindow *window) {
-	window->draw(*circle);
+void GameState::Draw(sf::RenderWindow &window) {
+	box->Draw(window);
 }
 
-void GameState::Destroy(sf::RenderWindow *window) {
-	delete circle;
+void GameState::Destroy() {
+	delete box;
 }

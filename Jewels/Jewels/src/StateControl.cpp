@@ -8,26 +8,26 @@ StateControl::StateControl() {
 
 StateControl::~StateControl() {
 	if (curr_state) {
-		this->curr_state->Destroy(this->window);
+		this->curr_state->Destroy();
 		delete curr_state;
 	}
 }
 
 void StateControl::Destroy() {
 	if (curr_state) {
-		curr_state->Destroy(this->window);
+		curr_state->Destroy();
 	}
 }
 
 void StateControl::Draw() {
 	if (curr_state) {
-		this->curr_state->Draw(this->window);
+		this->curr_state->Draw(*window);
 	}
 }
 
-void StateControl::Update(sf::Event& event) {
+void StateControl::Update(sf::Event& event, float _time) {
 	if (curr_state) {
-		this->curr_state->Update(event, this->window);
+		this->curr_state->Update(event, *window, _time);
 	}
 }
 
@@ -56,13 +56,13 @@ void StateControl::SwitchState(const STATE& new_state) {
 
 	switch (new_state) {
 		case PLAY: 
-			curr_state = new GameState(this->window);
+			curr_state = new GameState(*this->window);
 			break;
 		case PAUSE:
 			////
 			break;
 		case MENU:
-			curr_state = new MenuState(this->window);
+			curr_state = new MenuState(*this->window);
 			break;
 	}
 }

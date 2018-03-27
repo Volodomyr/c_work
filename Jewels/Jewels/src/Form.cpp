@@ -8,8 +8,12 @@ Form::Form() {
 }
 
 bool Form::isPointed(const sf::RenderWindow& window) {
-	sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
-	return rect.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouse_pos));
+	sf::Vector2i mouse_pos;
+	if (window.isOpen()) {
+		mouse_pos = sf::Mouse::getPosition(window);
+		return rect.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouse_pos));
+	}
+	return false;
 }
 
 bool Form::isClicked(sf::Event e, const sf::RenderWindow& window) {

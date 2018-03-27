@@ -27,7 +27,6 @@ sf::Vector2f Button::SelectSize(ButtonSize btnSize)
 
 Button::Button() {
 	this->SetText("Button");
-	this->SetTexture(resMngr->textures.Get("btn"));
 	this->SetFunction(nullptr);
 	rect.setFillColor(sf::Color::White);
 	rect.setSize(this->SelectSize(ButtonSize::Medium));

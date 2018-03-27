@@ -23,11 +23,12 @@ class MenuState: public State {
 	std::list<Button> items;
 
 public:
-	MenuState(sf::RenderWindow *_window);
-	void Update(sf::Event e, sf::RenderWindow *_window);
-	void Destroy(sf::RenderWindow *_window);
-	void Draw(sf::RenderWindow *_window);
-
+	MenuState(sf::RenderWindow& _window);
+	~MenuState() { this->Destroy(); }
+	void Update(sf::Event e, sf::RenderWindow& window, float time) override;
+	void Draw(sf::RenderWindow& window) override;
+	void Destroy() override;
+	
 	void SetPos(float x, float y);
 	void SetSize(const sf::Vector2f& _size);
 	sf::Vector2f& GetPos() { return pos; }

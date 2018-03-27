@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -131,11 +132,13 @@
     <ClCompile Include="src\StateControl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Box.hpp" />
     <ClInclude Include="inc\Button.hpp" />
     <ClInclude Include="inc\Form.hpp" />
     <ClInclude Include="inc\Game.hpp" />
     <ClInclude Include="inc\GameState.hpp" />
     <ClInclude Include="inc\MenuState.hpp" />
+    <ClInclude Include="inc\OpenBox.hpp" />
     <ClInclude Include="inc\Resource.hpp" />
     <ClInclude Include="inc\ResourceManager.hpp" />
     <ClInclude Include="inc\State.hpp" />

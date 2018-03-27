@@ -32,7 +32,7 @@ public:
 	bool isClose() { return isGameClose == true; }
 	void SwitchState(const STATE& new_state);
 	void Draw();//функции для отрисовки 
-	void Update(sf::Event& event); //обработка событий
+	void Update(sf::Event& event, float _time = 0.0f); //обработка событий
 	void Destroy(); //очистка полей
 	
 };

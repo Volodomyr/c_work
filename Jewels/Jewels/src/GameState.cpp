@@ -10,7 +10,7 @@ void GameState::Update(sf::Event e, sf::RenderWindow& window, float time) {
 }
 
 void GameState::Draw(sf::RenderWindow &window) {
-	box->Draw(window);
+	 box->Draw(window);
 }
 
 void GameState::Destroy() {

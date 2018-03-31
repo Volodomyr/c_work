@@ -3,35 +3,65 @@
 #define OPEN_BOX_H
 #include "Box.hpp"
 
-/*
-class OpenBox : public Box {
-	sf::Texture *texture;
+#include <SFML\Graphics.hpp>
+#include "ResourceManager.hpp"
+#include <cmath>
+#include <iostream>
+#include "Event.hpp"
 
-public:
-	OpenBox(): Box() {
-		texture = new sf::Texture();
-		
-	}
+const sf::Color BOX_COLOR = { 0, 0, 0, 50 };  //цвет фона
+const sf::Color BOX_BORDER_COLOR = { 0, 0, 0, 130 }; //цвет контура
+const float BOX_BORDER = 2.f; //толщина контура
+const float MOVE_SPEED = 140.f;
+const int MAX_UINT8 = 255;
+const int ALPHA_SHIFT = 100;
 
-	void SetPosition(float x, float y) override {
-		*position = sf::Vector2f(x, y);
-		rect->setPosition(*position);
-	}
-
-	void Update(sf::Event e, float time) override {
-
-	}
-
-	void Draw(sf::RenderWindow& window) override {
-		window.draw(*rect);
-	}
-	~OpenBox() {
-		delete texture;
-	}
-
-
+enum DIRECTION {
+	LEFT = -2,
+	UP,
+	NONE,
+	DOWN,
+	RIGHT
 };
 
-*/
+class OpenBox : public Box {
+	unsigned short value; //поле значения
+	sf::Sprite *sprite;
+
+	float offset;
+	DIRECTION direction;
+	bool swap_state;
+	float alpha;
+	int alphaShift;
+
+public:
+	OpenBox();
+	~OpenBox();
+	void SetPosition(float x, float y) override;      //ф-я устанавливает положение Box
+	void Update(sf::RenderWindow& window, float time) override;   //обработка событий
+	void Draw(sf::RenderWindow& window) override;  //отрисовка на экран
+	bool inMotion() { return offset > 0; }
+	bool isFill() { return value != 0; }
+	void BackToOrigin();
+	
+	void Move(float time);
+	bool isClicked(sf::RenderWindow& window);
+	void SetValue(unsigned short _value);
+	void SetTexture(const sf::Texture& _texture);
+	void SetTexture(const sf::Texture& _texture, const sf::IntRect& _rect);
+	void SetSprite(sf::Sprite& _sprite) { sprite = &_sprite; }
+	void SetDirection(DIRECTION _dir);
+	void SetSwapState(bool _swapState) { swap_state = _swapState; }
+	void SetAlphaLevel(int alphaShift, float _alpha = MAX_UINT8);
+	
+	float GetAlphaLevel();
+	bool GetSwapState() { return swap_state; }
+	DIRECTION GetDirection() { return direction; }
+	sf::Sprite* GetSprite() { return sprite; }
+	sf::Vector2f GetOffset(DIRECTION dir, float time);
+	sf::Texture GetTexture();
+	unsigned short GetValue();
+};
 
 #endif //OPEN_BOX_H
+

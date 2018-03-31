@@ -1,6 +1,6 @@
 #include "..\inc\Button.hpp"
 
-void Button::Update() {
+void Button::UpdateText() {
 	text.setOrigin(text.getGlobalBounds().width / 2.0f,
 		text.getGlobalBounds().height / 2.0f);	//меняем центр текста с 0, 0 - на полов. ширины и высоты
 
@@ -8,8 +8,7 @@ void Button::Update() {
 		rect.getGlobalBounds().height / 2.0f);
 }
 
-sf::Vector2f Button::SelectSize(ButtonSize btnSize)
-{
+sf::Vector2f Button::SelectSize(ButtonSize btnSize) {
 	sf::Vector2f _size;
 	switch (btnSize) {
 	case ButtonSize::Small:
@@ -25,11 +24,13 @@ sf::Vector2f Button::SelectSize(ButtonSize btnSize)
 	return _size;
 }
 
-Button::Button() {
+Button::Button(): Form() {
 	this->SetText("Button");
 	this->SetFunction(nullptr);
+
 	rect.setFillColor(sf::Color::White);
 	rect.setSize(this->SelectSize(ButtonSize::Medium));
+
 	text.setOutlineColor(sf::Color(27, 120, 154));
 	text.setOutlineThickness(M_TEXT_THICK);
 	text.setCharacterSize(M_TEXT_SIZE);
@@ -56,18 +57,17 @@ void Button::SetTexture(const sf::Texture& _texture) {
 
 void Button::SetText(const std::string& _text) {
 	text.setString(_text);
-	this->Update();
+	this->UpdateText();
 }
 
 void Button::SetPosition(float _x, float _y) {
 	this->position = sf::Vector2f(_x, _y);
 	rect.setPosition(this->position);
 	text.setPosition(this->position);
-	this->Update();
+	this->UpdateText();
 }
 
-void Button::HandleEvent(sf::Event e, const sf::RenderWindow& window) {
-
+void Button::Update(const sf::RenderWindow& window) {
 	if (this->isPointed(window)) {
 		if (!isSelected) {
 			isSelected = true;
@@ -79,7 +79,7 @@ void Button::HandleEvent(sf::Event e, const sf::RenderWindow& window) {
 		text.setFillColor(sf::Color::White);
 	}
 
-	if (this->isClicked(e, window)) {
+	if (this->isClicked(window)) {
 		function();
 	}
 }

@@ -25,9 +25,9 @@ void StateControl::Draw() {
 	}
 }
 
-void StateControl::Update(sf::Event& event, float _time) {
+void StateControl::Update(float _time) {
 	if (curr_state) {
-		this->curr_state->Update(event, *window, _time);
+		this->curr_state->Update(*window, _time);
 	}
 }
 

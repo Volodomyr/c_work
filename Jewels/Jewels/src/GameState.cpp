@@ -1,18 +1,20 @@
 #include "..\inc\GameState.hpp"
 
 GameState::GameState(sf::RenderWindow& _window) {
-	box = new Box;
-	box->SetPosition(200, 200);
+	game_bg.SetImage("game_bg2");
+
+	grid = new Grid(_window);
+	grid->Generate();
 }
 
-void GameState::Update(sf::Event e, sf::RenderWindow& window, float time) {
-
+void GameState::Update(sf::RenderWindow& window, float _time) {
+	grid->Update(window, _time);
 }
 
 void GameState::Draw(sf::RenderWindow &window) {
-	 box->Draw(window);
+	grid->Draw(window);
 }
 
 void GameState::Destroy() {
-	delete box;
+	delete grid;
 }

@@ -121,22 +121,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Background.cpp" />
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MenuState.cpp" />
+    <ClCompile Include="src\OpenBox.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\StateControl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Background.hpp" />
     <ClInclude Include="inc\Box.hpp" />
     <ClInclude Include="inc\Button.hpp" />
+    <ClInclude Include="inc\Event.hpp" />
     <ClInclude Include="inc\Form.hpp" />
     <ClInclude Include="inc\Game.hpp" />
     <ClInclude Include="inc\GameState.hpp" />
+    <ClInclude Include="inc\Grid.hpp" />
     <ClInclude Include="inc\MenuState.hpp" />
     <ClInclude Include="inc\OpenBox.hpp" />
     <ClInclude Include="inc\Resource.hpp" />

@@ -10,20 +10,13 @@ Box::Box() {
 	rect = new sf::RectangleShape;
 	rect->setPosition(*position);
 	rect->setSize(*size);
-	rect->setFillColor(BOX_COLOR); //ставим черный полупрозрачный цвет
-	rect->setOutlineThickness(BOX_BORDER);
-	rect->setOutlineColor(BOX_BORDER_COLOR);
-
-	texture = new sf::Texture;
-
-	value = '0';
+	rect->setFillColor(sf::Color::White); //цвет куба по-умолчанию
 }
 
 Box::~Box() {
 	delete position;
 	delete size;
 	delete rect;
-	delete texture;
 }
 
 void Box::SetPosition(float x, float y) {
@@ -31,14 +24,26 @@ void Box::SetPosition(float x, float y) {
 	rect->setPosition(*position);
 }
 
-void Box::Update(sf::Event e, float time) {
-
+void Box::SetPosition(const sf::Vector2f& _position) {
+	*position = _position;
+	rect->setPosition(*position);
 }
 
-void Box::Draw(sf::RenderWindow& window)  {
+void Box::SetColor(const sf::Color& color) {
+	rect->setFillColor(color);
+}
+
+void Box::Update(sf::RenderWindow& window, float time) {
+	/*if (this->isClicked(window)) {
+	selectLayer = new sf::Sprite;
+	selectLayer->setPosition(*position);
+	selectLayer->setTexture(resMngr->textures.Get("box_select"));
+	}*/
+}
+
+void Box::Draw(sf::RenderWindow& window) {
 	window.draw(*rect);
 }
-
 
 void Box::SetSize(float width, float height) {
 	*size = sf::Vector2f(width, height);
@@ -47,10 +52,6 @@ void Box::SetSize(float width, float height) {
 
 void Box::SetRect(const sf::RectangleShape& _rect) {
 	*rect = _rect;
-}
-
-void Box::SetValue(char _value) {
-	value = _value;
 }
 
 sf::Vector2f Box::GetPosition() {
@@ -63,8 +64,4 @@ sf::Vector2f Box::GetSize() {
 
 sf::RectangleShape Box::GetRect() {
 	return *rect;
-}
-
-char Box::GetValue() {
-	return value;
 }

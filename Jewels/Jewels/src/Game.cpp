@@ -1,12 +1,16 @@
 #include "..\inc\Game.hpp"
 #include <sstream>
+
 StateControl main_state;
+Background game_bg;
+//sf::Event game_event;
+Event events;
 
 Game::Game() {
 	gameWindow = new sf::RenderWindow();
 	gameWindow->create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), (sf::String)WINDOW_TITLE);
-	gameWindow->setFramerateLimit(FPS_MAX);
-
+	gameWindow->setKeyRepeatEnabled(false);
+	
 	main_state.SetWindow(gameWindow);
 	main_state.SwitchState(STATE::PLAY);
 	debugMode = true;
@@ -16,8 +20,6 @@ void Game::Run() {
 	int frames = 0;
 	sf::Clock timer;
 	sf::Clock clock;
-
-//	for (int i = 20; i < 255; i++) std::cout << (char)i << " - " << i << std::endl;
 
 	while (!main_state.isClose()) {
 		frames++;
@@ -29,8 +31,6 @@ void Game::Run() {
 
 		float time = clock.getElapsedTime().asSeconds();
 		clock.restart();
-
-		//std::cout << time << std::endl;
 
 		this->Update(time);
 		this->Draw();
@@ -51,12 +51,21 @@ void Game::Update(float _time) {
 			main_state.SwitchState(STATE::CLOSE);
 		}
 
-		main_state.Update(event, _time); //-
+		if (event.type == sf::Event::KeyPressed
+			&& event.key.code == sf::Keyboard::Tilde) {
+			debugMode ^= 1;
+		}
+
+		events.SetEventActive(true);
+		events.SetEvent(event);
 	}
+	main_state.Update(_time);
+	//sf::sleep(sf::Time(sf::milliseconds(100)));
 }
 
 void Game::Draw() {
 	gameWindow->clear(sf::Color::Green);
+	game_bg.Draw(*gameWindow);
 	main_state.Draw();
 
 	if (debugMode) {
@@ -68,7 +77,7 @@ void Game::Draw() {
 		text.setString(rw.c_str());
 		text.setCharacterSize(25);
 		text.setFillColor(sf::Color::Red);
-		text.setFont(resMngr->fonts.Get("Arial"));
+		text.setFont(resMng->fonts.Get("Arial"));
 
 		gameWindow->draw(text);
 	}

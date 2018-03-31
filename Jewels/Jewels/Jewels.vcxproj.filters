@@ -42,6 +42,15 @@
     <ClCompile Include="src\Box.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="src\Grid.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenBox.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Background.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Button.hpp">
@@ -75,6 +84,15 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="inc\OpenBox.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Grid.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Background.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Event.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

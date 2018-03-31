@@ -18,5 +18,5 @@ public:
 	static ResourceManager* get();
 };
 
-#define resMngr	ResourceManager::get()
+#define resMng	ResourceManager::get()
 #endif //RESOURCE_MANAGER_H

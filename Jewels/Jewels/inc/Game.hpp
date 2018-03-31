@@ -6,23 +6,27 @@
 #include "Resource.hpp"
 #include "MenuState.hpp"
 #include "StateControl.hpp"
+#include "Background.hpp"
+#include "Event.hpp"
+#include <list>
+//#include "EventList.hpp"
 const size_t WINDOW_WIDTH = 880;
 const size_t WINDOW_HEIGHT = 660;
-const size_t FPS_MAX = 60;
-constexpr const char *WINDOW_TITLE = "SuperJewels!";
+constexpr char *WINDOW_TITLE = "SuperJewels!";
+
+//extern sf::Event game_event;
 
 class Game {
 	sf::RenderWindow *gameWindow;
 	bool debugMode;
 	size_t fpsValue;
-
-	float z;
 	
 public:
 	Game();
 	~Game();
 	void Run();
 	sf::RenderWindow* GetWindow() { return gameWindow; }
+
 	void Update(float _time);
 	void Draw();
 };

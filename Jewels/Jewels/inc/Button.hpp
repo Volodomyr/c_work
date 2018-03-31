@@ -19,20 +19,21 @@ enum ButtonSize {
 
 class Button : public Form {
 	func_type function;
-	void Update();
-	sf::Vector2f SelectSize(ButtonSize btnSize);
 	bool isSelected;
+
+	void UpdateText();
+	sf::Vector2f SelectSize(ButtonSize btnSize);
 
 public:
 	Button();
 	Button(const std::string& _text, const sf::Texture& _texture,
-		func_type _func, ButtonSize btnSize = Large);
+		func_type _func, ButtonSize btnSize = Medium);
 	void SetFunction(func_type _function);
 	void SetTexture(const sf::Texture& _texture);
 	void SetText(const std::string& _text);
 
 	void SetPosition(float _x, float _y);
-	void HandleEvent(sf::Event e, const sf::RenderWindow& window);
+	void Update(const sf::RenderWindow& window);
 	void Draw(sf::RenderTarget& renderer);
 
 };

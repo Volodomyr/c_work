@@ -3,16 +3,17 @@
 #define GAME_STATE_H
 #include "State.hpp"
 #include <SFML\Graphics.hpp>
-#include "Box.hpp"
+#include "Grid.hpp"
+#include "Background.hpp"
+
 
 class GameState: public State {
-	/*
-	*/
-	Box *box;
+	Grid *grid;
+
 public:
 	GameState(sf::RenderWindow& _window);
 	~GameState() { this->Destroy(); }
-	void Update(sf::Event e, sf::RenderWindow& window, float time) override;
+	void Update(sf::RenderWindow& window, float _time) override;
 	void Draw(sf::RenderWindow& window) override;
 	void Destroy() override;
 };

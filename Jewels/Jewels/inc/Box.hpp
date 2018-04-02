@@ -27,7 +27,7 @@ public:
 	sf::Texture GetTexture() { return *rect->getTexture(); }
 	sf::Vector2f GetPosition();
 	sf::Vector2f GetSize();
-	sf::RectangleShape GetRect();
+	sf::RectangleShape& GetRect();
 };
 
 #endif //BOX_H

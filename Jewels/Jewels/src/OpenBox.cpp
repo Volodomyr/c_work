@@ -139,6 +139,7 @@ void OpenBox::SetDirection(DIRECTION _dir) {
 
 void OpenBox::BackToOrigin() {
 	this->sprite->setPosition(*position);
+	this->rect->setPosition(*position);
 }
 
 void OpenBox::SetAlphaLevel(int _alphaShift, float _alpha) {

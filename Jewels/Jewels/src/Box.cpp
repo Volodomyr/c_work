@@ -62,6 +62,6 @@ sf::Vector2f Box::GetSize() {
 	return *size;
 }
 
-sf::RectangleShape Box::GetRect() {
+sf::RectangleShape& Box::GetRect() {
 	return *rect;
 }

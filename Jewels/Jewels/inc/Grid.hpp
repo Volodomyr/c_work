@@ -25,11 +25,13 @@ class Grid {
 	bool AllowedMove(int x, int y);
 	DIRECTION IdentifyDirection(int x, int y);
 	void SwapCells(OpenBox& first, OpenBox& second);
+	int RandomValue(int v1, int v2 = 0);
 
 public:
 	Grid(const sf::RenderWindow& window);
 	~Grid();
 	void Generate();
+	void DeleteCopies();
 	void Update(sf::RenderWindow& window, float _time);
 	void Draw(sf::RenderWindow& window);
 

@@ -37,13 +37,49 @@ Grid::~Grid() {
 }
 
 void Grid::Generate() {
+	int items[BOX_TYPES] = { 0 };
 	for (int i = 0; i < GRID_SIZE; ++i) {
 		for (int j = 0; j < GRID_SIZE; ++j) {
-			unsigned short value = 1 + rand() % BOX_TYPES;
+			unsigned short value;
+			do {
+				value = 1 + rand() % BOX_TYPES;
+			} while (items[value - 1] >= ceil(pow(GRID_SIZE, 2) / BOX_TYPES));
+			items[value - 1]++;
 			cells[i][j].SetValue(value);
 		}
 	}
 }
+
+int Grid::RandomValue(int v1, int v2) {
+	unsigned short value;
+	do {
+		value = 1 + rand() % BOX_TYPES;
+	} while (value == v1 || value == v2);
+	return value;
+}
+
+void Grid::DeleteCopies() {
+	int new_value, prev_value;
+	for (int i = 0; i < GRID_SIZE; ++i) {
+		for (int j = 1; j < GRID_SIZE - 1; ++j) {
+			new_value = prev_value = 0;
+			if (cells[i][j] == cells[i][j - 1] && cells[i][j] == cells[i][j + 1]) {
+				new_value = this->RandomValue(cells[i][j].GetValue());
+				prev_value = cells[i][j].GetValue();
+				cells[i][j].SetValue(new_value);
+			}
+
+			if (cells[j][i] == cells[j - 1][i] && cells[j][i] == cells[j + 1][i]) {
+				new_value = this->RandomValue(cells[j][i].GetValue(), prev_value);
+				prev_value = cells[j][i].GetValue();
+				cells[j][i].SetValue(new_value);
+			}
+
+		}
+	}
+}
+
+
 
 void Grid::Update(sf::RenderWindow& window, float _time) {
 	for (int i = 0; i < GRID_SIZE; ++i) {
@@ -122,26 +158,16 @@ DIRECTION Grid::IdentifyDirection(int x, int y) {
 }
 
 void Grid::SwapCells(OpenBox& first, OpenBox& second) {
-	/*int value1 = first.GetValue();
+	int value1 = first.GetValue();
 	int value2 = second.GetValue();
 
-	first.BackToOrigin();
+	sf::Sprite s1 = first.GetSprite();
+	sf::Sprite s2 = second.GetSprite();
+	first.SetSprite(s2);
 	first.SetValue(value2);
 	first.SetSwapState(false);
-	//first.SetAlphaLevel(110, 0);
 
-	second.BackToOrigin();
+	second.SetSprite(s1);
 	second.SetValue(value1);
 	second.SetSwapState(false);
-	//second.SetAlphaLevel(110, 0);*/
-
-	sf::Sprite *s1 = first.GetSprite();
-	sf::Sprite *s2 = second.GetSprite();
-	first.SetSprite(*s2);
-	first.SetSwapState(false);
-
-	second.SetSprite(*s1);
-	second.SetSwapState(false);
-
-
 }

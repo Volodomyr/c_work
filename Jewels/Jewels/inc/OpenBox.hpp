@@ -44,12 +44,15 @@ public:
 	bool isFill() { return value != 0; }
 	void BackToOrigin();
 	
+	bool operator==(const OpenBox& other) { return value == other.value; }
+	bool operator!=(const OpenBox& other) { return !(*this == other); }
+
 	void Move(float time);
 	bool isClicked(sf::RenderWindow& window);
 	void SetValue(unsigned short _value);
 	void SetTexture(const sf::Texture& _texture);
 	void SetTexture(const sf::Texture& _texture, const sf::IntRect& _rect);
-	void SetSprite(sf::Sprite& _sprite) { sprite = &_sprite; }
+	void SetSprite(const sf::Sprite& _sprite) { *sprite = _sprite; }
 	void SetDirection(DIRECTION _dir);
 	void SetSwapState(bool _swapState) { swap_state = _swapState; }
 	void SetAlphaLevel(int alphaShift, float _alpha = MAX_UINT8);
@@ -57,7 +60,7 @@ public:
 	float GetAlphaLevel();
 	bool GetSwapState() { return swap_state; }
 	DIRECTION GetDirection() { return direction; }
-	sf::Sprite* GetSprite() { return sprite; }
+	sf::Sprite& GetSprite() { return *sprite; }
 	sf::Vector2f GetOffset(DIRECTION dir, float time);
 	sf::Texture GetTexture();
 	unsigned short GetValue();

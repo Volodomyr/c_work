@@ -5,9 +5,14 @@ GameState::GameState(sf::RenderWindow& _window) {
 
 	grid = new Grid(_window);
 	grid->Generate();
+	grid->DeleteCopies();
 }
 
 void GameState::Update(sf::RenderWindow& window, float _time) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G)) {
+		grid->Generate();
+		grid->DeleteCopies();
+	}
 	grid->Update(window, _time);
 }
 

@@ -80,8 +80,37 @@ void Grid::DeleteCopies() {
 }
 
 
+bool Grid::FindingMatch(int i, int j) {
+	bool x_axis = false, y_axis;
+	int m_j = markedBox->x, m_i = markedBox->y;
+
+	this->SwapValues(cells[i][j], cells[m_i][m_j]);
+	for (int i = 0; i < GRID_SIZE; ++i) {
+		for (int j = 1; j < GRID_SIZE - 1; ++j) {
+			if (cells[i][j] == cells[i][j - 1] && cells[i][j] == cells[i][j + 1]) {
+				for (int k = -1; k <= 1; ++k) {
+					cells[i][j + k].SetMatch(true);
+				}
+				x_axis = true;
+			}
+			if (cells[j][i] == cells[j - 1][i] && cells[j][i] == cells[j + 1][i]) {
+				for (int k = -1; k <= 1; ++k) {
+					cells[j + k][i].SetMatch(true);
+				}
+				y_axis = true;
+			}
+		}
+	}
+	this->SwapValues(cells[i][j], cells[m_i][m_j]);
+	
+	return x_axis || y_axis;
+}
+
 
 void Grid::Update(sf::RenderWindow& window, float _time) {
+	int m_j = markedBox->x;
+	int m_i = markedBox->y;
+
 	for (int i = 0; i < GRID_SIZE; ++i) {
 		for (int j = 0; j < GRID_SIZE; ++j) {
 			cells[i][j].Update(window, _time);
@@ -89,13 +118,16 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 			if(cells[i][j].isClicked(window) && !cells[i][j].inMotion()) { 
 				if(this->AllowedMove(j, i) && showBound) {
 					DIRECTION direct = IdentifyDirection(j, i);
-					int m_X = markedBox->x;
-					int m_Y = markedBox->y;
+					m_j = markedBox->x;
+					m_i = markedBox->y;
 
-					cells[i][j].SetDirection(direct);
-					//cells[i][j].SetAlphaLevel(-100, 255);
-					cells[m_Y][m_X].SetDirection((DIRECTION)-direct);
-					//cells[m_Y][m_X].SetAlphaLevel(-100, 255);
+					cells[i][j].Slide(direct);
+					cells[m_i][m_j].Slide((DIRECTION)-direct);
+					
+					if (this->FindingMatch(i, j)) {
+						cells[i][j].SetSwapState(true);
+						cells[m_i][m_j].SetSwapState(true);
+					}
 					*movedBox = sf::Vector2i(j, i);
 					showBound = false;
 				}
@@ -110,10 +142,22 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 		}
 	}
 
-	if (cells[movedBox->y][movedBox->x].GetSwapState() && 
-		cells[markedBox->y][markedBox->x].GetSwapState()) {
-		this->SwapCells(cells[movedBox->y][movedBox->x], cells[markedBox->y][markedBox->x]);
+	int mvd_i = movedBox->y;
+	int mvd_j = movedBox->x;
+
+	if (cells[mvd_i][mvd_j].GetMoved() && cells[m_i][m_j].GetMoved()
+		&& !cells[mvd_i][mvd_j].inMotion() && !cells[m_i][m_j].inMotion()) {
+
+		if (cells[mvd_i][mvd_j].GetSwapState() && cells[m_i][m_j].GetSwapState()) {
+			this->SwapCells(cells[mvd_i][mvd_j], cells[m_i][m_j]);
+		}
+		else {
+			DIRECTION dir = IdentifyDirection(mvd_j, mvd_i);
+			cells[mvd_i][mvd_j].Slide((DIRECTION)-dir);
+			cells[m_i][m_j].Slide(dir);
+		}
 	}
+	
 }
 
 void Grid::Draw(sf::RenderWindow& window) {
@@ -160,14 +204,25 @@ DIRECTION Grid::IdentifyDirection(int x, int y) {
 void Grid::SwapCells(OpenBox& first, OpenBox& second) {
 	int value1 = first.GetValue();
 	int value2 = second.GetValue();
+	std::cout << "#swap" << std::endl;
 
 	sf::Sprite s1 = first.GetSprite();
 	sf::Sprite s2 = second.GetSprite();
 	first.SetSprite(s2);
 	first.SetValue(value2);
 	first.SetSwapState(false);
+	first.SetMoved(false);
 
 	second.SetSprite(s1);
 	second.SetValue(value1);
 	second.SetSwapState(false);
+	second.SetMoved(false);
+}
+
+void Grid::SwapValues(OpenBox& first, OpenBox& second) {
+	int value1 = first.GetValue();
+	int value2 = second.GetValue();
+
+	first.SetValue(value2);
+	second.SetValue(value1);
 }

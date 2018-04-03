@@ -8,12 +8,10 @@ OpenBox::OpenBox(): Box() {
 	sprite = new sf::Sprite;
 	sprite->setPosition(*position);
 
-	alpha = MAX_UINT8;
-	alphaShift = ALPHA_SHIFT;
-
 	value = 0;
 	offset = 0;
 	swap_state = false;
+	moved = false;
 	direction = NONE;
 }
 
@@ -28,26 +26,12 @@ void OpenBox::SetPosition(float x, float y) {
 }
 
 void OpenBox::Update(sf::RenderWindow& window, float time) {
-	/*if (alpha < MAX_UINT8) {
-		alpha += alphaShift * time;
-	}
-	else if (alpha < 0) {
-		alpha = 0;
-		alphaShift = 0;
-	}
-	else if (alpha > MAX_UINT8) {
-		alpha = MAX_UINT8;
-		alphaShift = 0;
-	}*/
-
 	sprite->setTexture(resMng->textures.Get("boxes"));
 	sprite->setTextureRect(sf::IntRect(this->value * BOX_SIZE, 0, BOX_SIZE, BOX_SIZE));
-	//sprite->setColor(sf::Color(MAX_UINT8, MAX_UINT8, MAX_UINT8, (sf::Uint8)alpha));
 
-	if (direction != NONE) {
+	if (offset != 0) {
 		this->Move(time);
 	}
-	
 }
 
 bool OpenBox::isClicked(sf::RenderWindow& window) {
@@ -75,7 +59,6 @@ void OpenBox::SetTexture(const sf::Texture& _texture, const sf::IntRect& _rect) 
 sf::Texture OpenBox::GetTexture() {
 	return *sprite->getTexture();
 }
-
 
 unsigned short OpenBox::GetValue() {
 	return value;
@@ -122,19 +105,27 @@ void OpenBox::Move(float time) {
 		else if (!ds.y) {
 			target += { abs(ds.x) / ds.x * (BOX_SIZE + BOX_BORDER), 0 };
 		}
-	
-		sprite->setPosition(target);
+		
 		offset = 0;
 		direction = NONE;
-		swap_state = true;
-		//alpha = 0;
-		//alphaShift = 70;
+		moved = !moved;
+		if (moved) {
+			sprite->setPosition(target);
+		}
+		else {
+			sprite->setPosition(*this->position);
+		}
 	}
 }
 
 void OpenBox::SetDirection(DIRECTION _dir) {
 	this->direction = _dir;
+}
+
+void OpenBox::Slide(DIRECTION _dir) {
+	this->direction = _dir;
 	this->offset = BOX_SIZE;
+	swap_state = false;
 }
 
 void OpenBox::BackToOrigin() {
@@ -142,11 +133,10 @@ void OpenBox::BackToOrigin() {
 	this->rect->setPosition(*position);
 }
 
-void OpenBox::SetAlphaLevel(int _alphaShift, float _alpha) {
-	alpha = _alpha;
-	alphaShift = _alphaShift;
+void OpenBox::SetMatch(bool _match) {
+	match = _match;
 }
 
-float OpenBox::GetAlphaLevel() {
-	return alpha;
+bool OpenBox::GetMatch() {
+	return match;
 }

@@ -12,9 +12,7 @@
 const sf::Color BOX_COLOR = { 0, 0, 0, 50 };  //цвет фона
 const sf::Color BOX_BORDER_COLOR = { 0, 0, 0, 130 }; //цвет контура
 const float BOX_BORDER = 2.f; //толщина контура
-const float MOVE_SPEED = 140.f;
-const int MAX_UINT8 = 255;
-const int ALPHA_SHIFT = 100;
+const float MOVE_SPEED = 120.f;
 
 enum DIRECTION {
 	LEFT = -2,
@@ -31,8 +29,9 @@ class OpenBox : public Box {
 	float offset;
 	DIRECTION direction;
 	bool swap_state;
-	float alpha;
-	int alphaShift;
+	bool match;
+	bool moved;
+
 
 public:
 	OpenBox();
@@ -40,7 +39,7 @@ public:
 	void SetPosition(float x, float y) override;      //ф-я устанавливает положение Box
 	void Update(sf::RenderWindow& window, float time) override;   //обработка событий
 	void Draw(sf::RenderWindow& window) override;  //отрисовка на экран
-	bool inMotion() { return offset > 0; }
+	bool inMotion() { return offset != 0; }
 	bool isFill() { return value != 0; }
 	void BackToOrigin();
 	
@@ -48,6 +47,7 @@ public:
 	bool operator!=(const OpenBox& other) { return !(*this == other); }
 
 	void Move(float time);
+	void Slide(DIRECTION _dir);
 	bool isClicked(sf::RenderWindow& window);
 	void SetValue(unsigned short _value);
 	void SetTexture(const sf::Texture& _texture);
@@ -55,10 +55,12 @@ public:
 	void SetSprite(const sf::Sprite& _sprite) { *sprite = _sprite; }
 	void SetDirection(DIRECTION _dir);
 	void SetSwapState(bool _swapState) { swap_state = _swapState; }
-	void SetAlphaLevel(int alphaShift, float _alpha = MAX_UINT8);
-	
-	float GetAlphaLevel();
+	void SetMoved(bool _moved) { moved = _moved; }
+	void SetMatch(bool _match);
+
+	bool GetMatch();
 	bool GetSwapState() { return swap_state; }
+	bool GetMoved() { return moved; }
 	DIRECTION GetDirection() { return direction; }
 	sf::Sprite& GetSprite() { return *sprite; }
 	sf::Vector2f GetOffset(DIRECTION dir, float time);

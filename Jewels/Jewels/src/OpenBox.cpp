@@ -8,15 +8,21 @@ OpenBox::OpenBox(): Box() {
 	sprite = new sf::Sprite;
 	sprite->setPosition(*position);
 
-	value = 0;
+	value = 1;
 	offset = 0;
 	swap_state = false;
 	moved = false;
 	direction = NONE;
+	match = false;
+	animation = nullptr;
+	animPlaying = false;
+	sound = new sf::Sound;
 }
 
 OpenBox::~OpenBox() {
 	delete sprite;
+	delete animation;
+	delete sound;
 }
 
 void OpenBox::SetPosition(float x, float y) {
@@ -26,11 +32,34 @@ void OpenBox::SetPosition(float x, float y) {
 }
 
 void OpenBox::Update(sf::RenderWindow& window, float time) {
-	sprite->setTexture(resMng->textures.Get("boxes"));
+	sprite->setTexture(resMng->getTexture("boxes"));
 	sprite->setTextureRect(sf::IntRect(this->value * BOX_SIZE, 0, BOX_SIZE, BOX_SIZE));
 
 	if (offset != 0) {
 		this->Move(time);
+	}
+
+	this->AnimationController();
+	if (animation) {
+		animation->Update(time, *this->position);
+	}
+}
+
+void OpenBox::AnimationController() {
+	if (match && value) {
+		value = 0;
+		animation = new Animation;
+		*animation = anim_mng.Get("destroy", "box_animation.xml");
+		animPlaying = true;
+	}
+	if (!value) {
+		if (animation && !animation->GetSpeed()) {
+			delete animation;
+			animation = nullptr;
+			animPlaying = false;
+			sound->setBuffer(resMng->getSound("cell_destroy"));
+			sound->play();
+		}
 	}
 }
 
@@ -41,6 +70,9 @@ bool OpenBox::isClicked(sf::RenderWindow& window) {
 void OpenBox::Draw(sf::RenderWindow& window) {
 	window.draw(*rect);
 	window.draw(*sprite);
+	if (animation) {
+		animation->Draw(window);
+	}
 }
 
 void OpenBox::SetValue(unsigned short _value) {
@@ -109,6 +141,10 @@ void OpenBox::Move(float time) {
 		offset = 0;
 		direction = NONE;
 		moved = !moved;
+
+		sound->setBuffer(resMng->getSound("cell_moved"));
+		sound->play();
+
 		if (moved) {
 			sprite->setPosition(target);
 		}

@@ -7,14 +7,13 @@
 #include "MenuState.hpp"
 #include "StateControl.hpp"
 #include "Background.hpp"
+#include "AnimationManager.hpp"
 #include "Event.hpp"
 #include <list>
-//#include "EventList.hpp"
+
 const size_t WINDOW_WIDTH = 880;
 const size_t WINDOW_HEIGHT = 660;
 constexpr char *WINDOW_TITLE = "SuperJewels!";
-
-//extern sf::Event game_event;
 
 class Game {
 	sf::RenderWindow *gameWindow;

@@ -9,11 +9,14 @@
 class ResourceManager {
 private:
 	ResourceManager();
-
-public:
 	Resource<sf::Texture> textures; //контейнер для текстур
 	Resource<sf::SoundBuffer> sounds; //контейнер для звуков
 	Resource<sf::Font> fonts; //контейнер для шрифтов
+
+public:
+	sf::Texture& getTexture(const std::string& textureName);
+	sf::SoundBuffer& getSound(const std::string& soundName);
+	sf::Font& getFont(const std::string& fontName);
 
 	static ResourceManager* get();
 };

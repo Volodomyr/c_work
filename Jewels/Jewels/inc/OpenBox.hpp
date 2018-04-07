@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include "Event.hpp"
+#include "AnimationManager.hpp"
 
 const sf::Color BOX_COLOR = { 0, 0, 0, 50 };  //цвет фона
 const sf::Color BOX_BORDER_COLOR = { 0, 0, 0, 130 }; //цвет контура
@@ -31,7 +32,9 @@ class OpenBox : public Box {
 	bool swap_state;
 	bool match;
 	bool moved;
-
+	bool animPlaying;
+	sf::Sound *sound;
+	Animation *animation;
 
 public:
 	OpenBox();
@@ -42,6 +45,7 @@ public:
 	bool inMotion() { return offset != 0; }
 	bool isFill() { return value != 0; }
 	void BackToOrigin();
+	void AnimationController();
 	
 	bool operator==(const OpenBox& other) { return value == other.value; }
 	bool operator!=(const OpenBox& other) { return !(*this == other); }
@@ -58,6 +62,7 @@ public:
 	void SetMoved(bool _moved) { moved = _moved; }
 	void SetMatch(bool _match);
 
+	bool isAnimPlaying() { return animPlaying == true; }
 	bool GetMatch();
 	bool GetSwapState() { return swap_state; }
 	bool GetMoved() { return moved; }

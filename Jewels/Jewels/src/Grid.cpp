@@ -19,7 +19,7 @@ Grid::Grid(const sf::RenderWindow& window) {
 	}
 
 	bound = new Box;
-	bound->SetTexture(resMng->textures.Get("select"));
+	bound->SetTexture(resMng->getTexture("select"));
 	bound->SetColor(sf::Color(166, 239, 255));
 
 	showBound = false;
@@ -27,6 +27,8 @@ Grid::Grid(const sf::RenderWindow& window) {
 
 	markedBox = new sf::Vector2i;
 	movedBox = new sf::Vector2i;
+	sound = new sf::Sound;
+	cellSwap = false;
 }
 
 Grid::~Grid() {
@@ -34,6 +36,7 @@ Grid::~Grid() {
 	delete size;
 	delete markedBox;
 	delete movedBox;
+	delete sound;
 }
 
 void Grid::Generate() {
@@ -80,32 +83,55 @@ void Grid::DeleteCopies() {
 }
 
 
-bool Grid::FindingMatch(int i, int j) {
-	bool x_axis = false, y_axis;
-	int m_j = markedBox->x, m_i = markedBox->y;
-
-	this->SwapValues(cells[i][j], cells[m_i][m_j]);
+void Grid::FindingMatch() {
 	for (int i = 0; i < GRID_SIZE; ++i) {
-		for (int j = 1; j < GRID_SIZE - 1; ++j) {
-			if (cells[i][j] == cells[i][j - 1] && cells[i][j] == cells[i][j + 1]) {
-				for (int k = -1; k <= 1; ++k) {
-					cells[i][j + k].SetMatch(true);
+		for (int j = 0; j < GRID_SIZE - 2; ++j) {
+			if (cells[i][j] == cells[i][j + 1] && cells[i][j] == cells[i][j + 2]) { //îñü ÎÕ
+				cells[i][j].SetMatch(true);
+
+				for (int k = j + 1; k < GRID_SIZE; ++k) {
+					if (cells[i][k] == cells[i][k - 1]) {
+						cells[i][k].SetMatch(true);
+					}
+					else break;
 				}
-				x_axis = true;
 			}
-			if (cells[j][i] == cells[j - 1][i] && cells[j][i] == cells[j + 1][i]) {
-				for (int k = -1; k <= 1; ++k) {
-					cells[j + k][i].SetMatch(true);
+			if (cells[j][i] == cells[j + 1][i] && cells[j][i] == cells[j + 2][i]) {//îñü ÎÓ
+				cells[j][i].SetMatch(true);
+
+				for (int k = j + 1; k < GRID_SIZE; ++k) {
+					if (cells[k][i] == cells[k - 1][i]) {
+						cells[k][i].SetMatch(true);
+					}
+					else break;
 				}
-				y_axis = true;
 			}
 		}
 	}
-	this->SwapValues(cells[i][j], cells[m_i][m_j]);
-	
-	return x_axis || y_axis;
 }
 
+bool Grid::ConsistMatchInLine(int i, int j) {
+	bool x_axis = false, y_axis = false;
+	int m_j = markedBox->x, m_i = markedBox->y;
+
+	this->SwapValues(cells[i][j], cells[m_i][m_j]);
+
+	for (int t = 0; t < GRID_SIZE - 2; ++t) {
+		if (cells[i][t] == cells[i][t + 1] && cells[i][t] == cells[i][t + 2]
+			|| cells[m_i][t] == cells[m_i][t + 1] && cells[m_i][t] == cells[m_i][t + 2]) {
+			x_axis = true;
+			break;
+		}
+		if (cells[t][j] == cells[t + 1][j] && cells[t][j] == cells[t + 2][j]
+			|| cells[t][m_j] == cells[t + 1][m_j] && cells[t][m_j] == cells[t + 2][m_j]) {
+			y_axis = true;
+			break;
+		}
+	}
+	this->SwapValues(cells[i][j], cells[m_i][m_j]);
+
+	return x_axis || y_axis;
+}
 
 void Grid::Update(sf::RenderWindow& window, float _time) {
 	int m_j = markedBox->x;
@@ -124,9 +150,10 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 					cells[i][j].Slide(direct);
 					cells[m_i][m_j].Slide((DIRECTION)-direct);
 					
-					if (this->FindingMatch(i, j)) {
+					if (this->ConsistMatchInLine(i, j)) {
 						cells[i][j].SetSwapState(true);
 						cells[m_i][m_j].SetSwapState(true);
+						cellSwap = true;
 					}
 					*movedBox = sf::Vector2i(j, i);
 					showBound = false;
@@ -135,8 +162,9 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 					bound->SetPosition(cells[i][j].GetPosition());
 					*markedBox = sf::Vector2i(j, i);
 					showBound = true;
+					sound->setBuffer(resMng->getSound("cursor_activate"));
+					sound->play();
 				}
-				
 			}
 			
 		}
@@ -150,6 +178,7 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 
 		if (cells[mvd_i][mvd_j].GetSwapState() && cells[m_i][m_j].GetSwapState()) {
 			this->SwapCells(cells[mvd_i][mvd_j], cells[m_i][m_j]);
+			cellSwap = false;
 		}
 		else {
 			DIRECTION dir = IdentifyDirection(mvd_j, mvd_i);
@@ -157,7 +186,11 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 			cells[m_i][m_j].Slide(dir);
 		}
 	}
-	
+
+	if (!cellSwap) {
+		this->FindingMatch();
+		this->ShiftLines();
+	}
 }
 
 void Grid::Draw(sf::RenderWindow& window) {
@@ -225,4 +258,31 @@ void Grid::SwapValues(OpenBox& first, OpenBox& second) {
 
 	first.SetValue(value2);
 	second.SetValue(value1);
+}
+
+void Grid::ShiftLines() {
+	for (int i = GRID_SIZE - 1; i > 0; --i) {
+		for (int j = 0; j < GRID_SIZE; ++j) {
+			if (!cells[i][j].isFill() && !cells[i][j].isAnimPlaying()) {
+				cells[i][j].SetMatch(false);
+				this->SwapValues(cells[i][j], cells[i - 1][j]);
+			}
+		}
+	}
+
+	for (int i = 0; i < GRID_SIZE; ++i) {
+		if (!cells[0][i].isFill() && !cells[0][i].isAnimPlaying()) {
+			cells[0][i].SetMatch(false);
+			int value = 0;
+			do {
+				value = this->RandomValue(0);
+				if (i && value == cells[0][i - 1].GetValue()
+					|| i < GRID_SIZE - 1 && value == cells[0][i + 1].GetValue()) {
+					continue;
+				}
+			} while (value == cells[1][i].GetValue());
+			
+			cells[0][i].SetValue(value);
+		}
+	}
 }

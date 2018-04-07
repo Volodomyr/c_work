@@ -10,7 +10,7 @@ Background::~Background() {
 }
 
 void Background::SetImage(const std::string& imageName) {
-	rect->setTexture(resMng->textures.Get(imageName));
+	rect->setTexture(resMng->getTexture(imageName));
 }
 
 void Background::Draw(sf::RenderWindow& window) {

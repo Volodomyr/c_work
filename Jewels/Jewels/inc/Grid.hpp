@@ -15,17 +15,21 @@ class Grid {
 	sf::Vector2f *size;
 	sf::Vector2i *markedBox;
 	sf::Vector2i *movedBox;
+	sf::Sound *sound;
 
 	Box *bound;
 	size_t rows;
 	size_t cols;
 	bool showBound;
+	bool cellSwap;
 	std::vector< std::vector<OpenBox> > cells;
 
 	bool AllowedMove(int x, int y);
 	DIRECTION IdentifyDirection(int x, int y);
 	void SwapCells(OpenBox& first, OpenBox& second);
-	bool FindingMatch(int i, int j);
+	void FindingMatch();
+	bool ConsistMatchInLine(int i, int j);
+	void ShiftLines();
 	int RandomValue(int v1, int v2 = 0);
 	void SwapValues(OpenBox& first, OpenBox& second);
 

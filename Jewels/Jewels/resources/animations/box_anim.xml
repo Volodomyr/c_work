@@ -1,0 +1,15 @@
+<!DOCTYPE SpriteDecomposer>
+<sprites image="@Anim223.png" transparentColor="">
+ <animation title="h_lightning" delay="170">
+  <cut w="63" x="1" y="25" h="24" row="1" col="1"/>
+  <cut w="62" x="65" y="25" h="25" row="1" col="1"/>
+  <cut w="65" x="127" y="24" h="26" row="1" col="1"/>
+  <cut w="63" x="193" y="25" h="25" row="1" col="1"/>
+ </animation>
+ <animation title="v_lightning" delay="150">
+  <cut w="30" x="16" y="66" h="62" row="1" col="1"/>
+  <cut w="33" x="81" y="66" h="62" row="1" col="1"/>
+  <cut w="35" x="144" y="65" h="63" row="1" col="1"/>
+  <cut w="28" x="209" y="66" h="61" row="1" col="1"/>
+ </animation>
+</sprites>

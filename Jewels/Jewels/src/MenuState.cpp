@@ -25,7 +25,7 @@ MenuState::MenuState(sf::RenderWindow& window) {
 
 	for (int i = 0; i < BTN_COUNT; ++i) {
 		temp[i].SetText(titleArr[i]);
-		temp[i].SetTexture(resMng->textures.Get("menu_btn"));
+		temp[i].SetTexture(resMng->getTexture("menu_btn"));
 
 		float x_pos = pos->x + OFFSET;
 		float y_pos = pos->y + OFFSET + i * (BTN_SPACE + temp[0].getSize().y);

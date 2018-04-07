@@ -1,0 +1,10 @@
+<!DOCTYPE SpriteDecomposer>
+<sprites image="destroy_box.png" transparentColor="">
+ <animation title="destroy" delay="170">
+  <cut w="47.75" x="8.25" y="7.5" h="45.5" row="1" col="1"/>
+  <cut w="44.5" x="73.5" y="9.5" h="39.5" row="1" col="1"/>
+  <cut w="40.25" x="138.75" y="16.75" h="32.25" row="1" col="1"/>
+  <cut w="41" x="203" y="18.5" h="35.5" row="1" col="1"/>
+  <cut w="39.25" x="263.75" y="23.5" h="33.5" row="1" col="1"/>
+ </animation>
+</sprites>

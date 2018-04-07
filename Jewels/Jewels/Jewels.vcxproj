@@ -121,6 +121,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\AnimationManager.cpp" />
     <ClCompile Include="src\Background.cpp" />
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Button.cpp" />
@@ -133,8 +135,14 @@
     <ClCompile Include="src\OpenBox.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\StateControl.cpp" />
+    <ClCompile Include="tinyxml\tinystr.cpp" />
+    <ClCompile Include="tinyxml\tinyxml.cpp" />
+    <ClCompile Include="tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxml\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Animation.hpp" />
+    <ClInclude Include="inc\AnimationManager.hpp" />
     <ClInclude Include="inc\Background.hpp" />
     <ClInclude Include="inc\Box.hpp" />
     <ClInclude Include="inc\Button.hpp" />
@@ -149,6 +157,8 @@
     <ClInclude Include="inc\ResourceManager.hpp" />
     <ClInclude Include="inc\State.hpp" />
     <ClInclude Include="inc\StateControl.hpp" />
+    <ClInclude Include="tinyxml\tinystr.h" />
+    <ClInclude Include="tinyxml\tinyxml.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,8 +3,8 @@
 
 StateControl main_state;
 Background game_bg;
-//sf::Event game_event;
 Event events;
+AnimationManager anim_mng;
 
 Game::Game() {
 	gameWindow = new sf::RenderWindow();
@@ -77,7 +77,7 @@ void Game::Draw() {
 		text.setString(rw.c_str());
 		text.setCharacterSize(25);
 		text.setFillColor(sf::Color::Red);
-		text.setFont(resMng->fonts.Get("Arial"));
+		text.setFont(resMng->getFont("Arial"));
 
 		gameWindow->draw(text);
 	}

@@ -10,6 +10,13 @@
 const size_t GRID_SIZE = 8;
 const size_t BOX_TYPES = 6;
 
+enum GRID_STATE {
+	NUL = 0,
+	SWAP,
+	FIND_MATCH,
+	SHIFT_LINES,
+};
+
 class Grid {
 	sf::Vector2f *position;
 	sf::Vector2f *size;
@@ -17,11 +24,13 @@ class Grid {
 	sf::Vector2i *movedBox;
 	sf::Sound *sound;
 
+
 	Box *bound;
 	size_t rows;
 	size_t cols;
 	bool showBound;
 	bool cellSwap;
+	GRID_STATE state;
 	std::vector< std::vector<OpenBox> > cells;
 
 	bool AllowedMove(int x, int y);
@@ -32,6 +41,7 @@ class Grid {
 	void ShiftLines();
 	int RandomValue(int v1, int v2 = 0);
 	void SwapValues(OpenBox& first, OpenBox& second);
+	void StateProcessing();
 
 public:
 	Grid(const sf::RenderWindow& window);

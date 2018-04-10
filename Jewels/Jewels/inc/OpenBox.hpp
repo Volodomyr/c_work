@@ -26,13 +26,13 @@ enum DIRECTION {
 class OpenBox : public Box {
 	unsigned short value; //поле значения
 	sf::Sprite *sprite;
-
 	float offset;
 	DIRECTION direction;
 	bool swap_state;
 	bool match;
 	bool moved;
 	bool animPlaying;
+	bool playSoundMove;
 	sf::Sound *sound;
 	Animation *animation;
 

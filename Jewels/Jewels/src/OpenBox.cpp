@@ -16,6 +16,7 @@ OpenBox::OpenBox(): Box() {
 	match = false;
 	animation = nullptr;
 	animPlaying = false;
+	playSoundMove = false;
 	sound = new sf::Sound;
 }
 
@@ -51,14 +52,14 @@ void OpenBox::AnimationController() {
 		animation = new Animation;
 		*animation = anim_mng.Get("destroy", "box_animation.xml");
 		animPlaying = true;
+		sound->setBuffer(resMng->getSound("cell_destroy"));
+		sound->play();
 	}
 	if (!value) {
 		if (animation && !animation->GetSpeed()) {
 			delete animation;
 			animation = nullptr;
 			animPlaying = false;
-			sound->setBuffer(resMng->getSound("cell_destroy"));
-			sound->play();
 		}
 	}
 }
@@ -128,6 +129,11 @@ void OpenBox::Move(float time) {
 	if (offset > 0) {
 		sprite->move(ds.x, ds.y);
 		offset -= MOVE_SPEED * time;
+		if (playSoundMove && offset < BOX_SIZE / 2.0f) {
+			playSoundMove = false;
+			sound->setBuffer(resMng->getSound("cell_moved"));
+			sound->play();
+		}
 	}
 	else if (offset < 0) {
 		sf::Vector2f target = *this->position;
@@ -141,9 +147,6 @@ void OpenBox::Move(float time) {
 		offset = 0;
 		direction = NONE;
 		moved = !moved;
-
-		sound->setBuffer(resMng->getSound("cell_moved"));
-		sound->play();
 
 		if (moved) {
 			sprite->setPosition(target);
@@ -162,6 +165,7 @@ void OpenBox::Slide(DIRECTION _dir) {
 	this->direction = _dir;
 	this->offset = BOX_SIZE;
 	swap_state = false;
+	playSoundMove = true;
 }
 
 void OpenBox::BackToOrigin() {

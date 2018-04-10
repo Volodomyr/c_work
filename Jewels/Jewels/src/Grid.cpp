@@ -28,7 +28,7 @@ Grid::Grid(const sf::RenderWindow& window) {
 	markedBox = new sf::Vector2i;
 	movedBox = new sf::Vector2i;
 	sound = new sf::Sound;
-	cellSwap = false;
+	state =  GRID_STATE::NUL;
 }
 
 Grid::~Grid() {
@@ -134,9 +134,6 @@ bool Grid::ConsistMatchInLine(int i, int j) {
 }
 
 void Grid::Update(sf::RenderWindow& window, float _time) {
-	int m_j = markedBox->x;
-	int m_i = markedBox->y;
-
 	for (int i = 0; i < GRID_SIZE; ++i) {
 		for (int j = 0; j < GRID_SIZE; ++j) {
 			cells[i][j].Update(window, _time);
@@ -144,8 +141,8 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 			if(cells[i][j].isClicked(window) && !cells[i][j].inMotion()) { 
 				if(this->AllowedMove(j, i) && showBound) {
 					DIRECTION direct = IdentifyDirection(j, i);
-					m_j = markedBox->x;
-					m_i = markedBox->y;
+					int m_j = markedBox->x;
+					int m_i = markedBox->y;
 
 					cells[i][j].Slide(direct);
 					cells[m_i][m_j].Slide((DIRECTION)-direct);
@@ -153,7 +150,6 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 					if (this->ConsistMatchInLine(i, j)) {
 						cells[i][j].SetSwapState(true);
 						cells[m_i][m_j].SetSwapState(true);
-						cellSwap = true;
 					}
 					*movedBox = sf::Vector2i(j, i);
 					showBound = false;
@@ -170,15 +166,20 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 		}
 	}
 
+	this->StateProcessing();
+}
+
+void Grid::StateProcessing() {
 	int mvd_i = movedBox->y;
 	int mvd_j = movedBox->x;
+	int m_j = markedBox->x;
+	int m_i = markedBox->y;
 
 	if (cells[mvd_i][mvd_j].GetMoved() && cells[m_i][m_j].GetMoved()
 		&& !cells[mvd_i][mvd_j].inMotion() && !cells[m_i][m_j].inMotion()) {
 
 		if (cells[mvd_i][mvd_j].GetSwapState() && cells[m_i][m_j].GetSwapState()) {
-			this->SwapCells(cells[mvd_i][mvd_j], cells[m_i][m_j]);
-			cellSwap = false;
+			state = GRID_STATE::SWAP;
 		}
 		else {
 			DIRECTION dir = IdentifyDirection(mvd_j, mvd_i);
@@ -187,9 +188,19 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 		}
 	}
 
-	if (!cellSwap) {
-		this->FindingMatch();
-		this->ShiftLines();
+	switch (state) {
+		case SWAP:
+			this->SwapCells(cells[mvd_i][mvd_j], cells[m_i][m_j]);
+			state = GRID_STATE::FIND_MATCH;
+			break;
+		case FIND_MATCH:
+			this->FindingMatch();
+			state = GRID_STATE::SHIFT_LINES;
+			break;
+		case SHIFT_LINES:
+			this->ShiftLines();
+			state = GRID_STATE::FIND_MATCH;
+			break;
 	}
 }
 
@@ -212,7 +223,7 @@ bool Grid::AllowedMove(int x, int y) {
 }
 
 DIRECTION Grid::IdentifyDirection(int x, int y) {
-	DIRECTION dir = NONE;
+	DIRECTION dir = DIRECTION::NONE;
 
 	if (y == markedBox->y) {
 		if (x > markedBox->x) {

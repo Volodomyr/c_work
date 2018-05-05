@@ -41,12 +41,13 @@ Grid::~Grid() {
 
 void Grid::Generate() {
 	int items[BOX_TYPES] = { 0 };
+	const int MAX_BOX_TYPES = ceil(pow(GRID_SIZE, 2) / BOX_TYPES);
 	for (int i = 0; i < GRID_SIZE; ++i) {
 		for (int j = 0; j < GRID_SIZE; ++j) {
 			unsigned short value;
 			do {
 				value = 1 + rand() % BOX_TYPES;
-			} while (items[value - 1] >= ceil(pow(GRID_SIZE, 2) / BOX_TYPES));
+			} while (items[value - 1] >= MAX_BOX_TYPES);
 			items[value - 1]++;
 			cells[i][j].SetValue(value);
 		}
@@ -166,10 +167,10 @@ void Grid::Update(sf::RenderWindow& window, float _time) {
 		}
 	}
 
-	this->StateProcessing();
+	state = this->StateProcessing(state);
 }
 
-void Grid::StateProcessing() {
+GRID_STATE Grid::StateProcessing(GRID_STATE _state) {
 	int mvd_i = movedBox->y;
 	int mvd_j = movedBox->x;
 	int m_j = markedBox->x;
@@ -179,7 +180,7 @@ void Grid::StateProcessing() {
 		&& !cells[mvd_i][mvd_j].inMotion() && !cells[m_i][m_j].inMotion()) {
 
 		if (cells[mvd_i][mvd_j].GetSwapState() && cells[m_i][m_j].GetSwapState()) {
-			state = GRID_STATE::SWAP;
+			_state = GRID_STATE::SWAP;
 		}
 		else {
 			DIRECTION dir = IdentifyDirection(mvd_j, mvd_i);
@@ -188,20 +189,21 @@ void Grid::StateProcessing() {
 		}
 	}
 
-	switch (state) {
+	switch (_state) {
 		case SWAP:
 			this->SwapCells(cells[mvd_i][mvd_j], cells[m_i][m_j]);
-			state = GRID_STATE::FIND_MATCH;
+			_state = GRID_STATE::FIND_MATCH;
 			break;
 		case FIND_MATCH:
 			this->FindingMatch();
-			state = GRID_STATE::SHIFT_LINES;
+			_state = GRID_STATE::SHIFT_LINES;
 			break;
 		case SHIFT_LINES:
 			this->ShiftLines();
-			state = GRID_STATE::FIND_MATCH;
+			_state = GRID_STATE::FIND_MATCH;
 			break;
 	}
+	return _state;
 }
 
 void Grid::Draw(sf::RenderWindow& window) {
@@ -294,6 +296,48 @@ void Grid::ShiftLines() {
 			} while (value == cells[1][i].GetValue());
 			
 			cells[0][i].SetValue(value);
+		}
+	}
+}
+
+bool Grid::ConsistMatch(Matrix& _cells) {
+	bool result = false;
+	
+	for (int i = 0; i < GRID_SIZE; ++i) {
+		for (int j = 0; j < GRID_SIZE - 2; ++j) {
+			if (_cells[i][j] == _cells[i][j + 1] && _cells[i][j] == _cells[i][j + 2]) {
+				result = true;
+				break;
+			}
+			if (_cells[j][i] == _cells[j + 1][i] && _cells[j][i] == _cells[j + 2][i]) {
+				result = true;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
+bool Grid::isCorrectIndex(size_t index, size_t max) {
+	return index >= 0 && index < max;
+}
+
+void Grid::CellDistribute() {
+	std::vector<int> list;
+
+	for (size_t i = 0; i < cells.size(); ++i) {
+		for (size_t j = 0; j < cells[0].size(); ++j) {
+			list.push_back(cells[i][j].GetValue());
+		}
+	}
+
+	while (ConsistMatch(cells)) {
+		std::random_shuffle(list.begin(), list.end());
+
+		for (size_t i = 0; i < cells.size(); ++i) {
+			for (size_t j = 0; j < cells[0].size(); ++j) {
+				cells[i][j].SetValue(list[i * cells[0].size() + j]);
+			}
 		}
 	}
 }

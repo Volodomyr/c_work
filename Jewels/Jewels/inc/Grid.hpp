@@ -7,8 +7,10 @@
 #include <ctime>
 #include <iostream>
 #include <Windows.h>
+#include <algorithm>
 const size_t GRID_SIZE = 8;
 const size_t BOX_TYPES = 6;
+using Matrix = std::vector< std::vector<OpenBox> >;
 
 enum GRID_STATE {
 	NUL = 0,
@@ -41,13 +43,17 @@ class Grid {
 	void ShiftLines();
 	int RandomValue(int v1, int v2 = 0);
 	void SwapValues(OpenBox& first, OpenBox& second);
-	void StateProcessing();
+	GRID_STATE StateProcessing(GRID_STATE _state);
+	bool ConsistMatch(Matrix& _cells);
+	bool isCorrectIndex(size_t index, size_t max);
+	
 
 public:
 	Grid(const sf::RenderWindow& window);
 	~Grid();
 	void Generate();
 	void DeleteCopies();
+	void CellDistribute();
 	void Update(sf::RenderWindow& window, float _time);
 	void Draw(sf::RenderWindow& window);
 

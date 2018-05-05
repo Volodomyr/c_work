@@ -135,6 +135,7 @@
     <ClCompile Include="src\OpenBox.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\StateControl.cpp" />
+    <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="tinyxml\tinystr.cpp" />
     <ClCompile Include="tinyxml\tinyxml.cpp" />
     <ClCompile Include="tinyxml\tinyxmlerror.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="inc\ResourceManager.hpp" />
     <ClInclude Include="inc\State.hpp" />
     <ClInclude Include="inc\StateControl.hpp" />
+    <ClInclude Include="inc\Text.hpp" />
     <ClInclude Include="tinyxml\tinystr.h" />
     <ClInclude Include="tinyxml\tinyxml.h" />
   </ItemGroup>

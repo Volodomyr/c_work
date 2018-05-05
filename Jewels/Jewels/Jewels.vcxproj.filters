@@ -72,6 +72,9 @@
     <ClCompile Include="src\AnimationManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="src\Text.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Button.hpp">
@@ -126,6 +129,9 @@
       <Filter>XmlLib</Filter>
     </ClInclude>
     <ClInclude Include="inc\AnimationManager.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Text.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

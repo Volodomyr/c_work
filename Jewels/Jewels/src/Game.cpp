@@ -12,7 +12,7 @@ Game::Game() {
 	gameWindow->setKeyRepeatEnabled(false);
 	
 	main_state.SetWindow(gameWindow);
-	main_state.SwitchState(STATE::PLAY);
+	main_state.SwitchState(STATE::MENU);
 	debugMode = true;
 }
 

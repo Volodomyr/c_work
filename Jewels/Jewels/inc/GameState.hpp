@@ -5,10 +5,11 @@
 #include <SFML\Graphics.hpp>
 #include "Grid.hpp"
 #include "Background.hpp"
+#include "Text.hpp"
 
-
-class GameState: public State {
+class GameState : public State {
 	Grid *grid;
+	Text *score;
 
 public:
 	GameState(sf::RenderWindow& _window);

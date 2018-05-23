@@ -35,6 +35,7 @@ class OpenBox : public Box {
 	bool playSoundMove;
 	sf::Sound *sound;
 	Animation *animation;
+	unsigned points;
 
 public:
 	OpenBox();
@@ -62,6 +63,7 @@ public:
 	void SetMoved(bool _moved) { moved = _moved; }
 	void SetMatch(bool _match);
 
+	unsigned GetPoint() { return points; }
 	bool isAnimPlaying() { return animPlaying == true; }
 	bool GetMatch();
 	bool GetSwapState() { return swap_state; }

@@ -7,7 +7,7 @@ Grid::Grid(const sf::RenderWindow& window) {
 	*size = sf::Vector2f(this->cols * BOX_SIZE, this->rows * BOX_SIZE);
 	
 	position = new sf::Vector2f;
-	*position = sf::Vector2f((window.getSize().x - size->x) / 2.0f,
+	*position = sf::Vector2f((window.getSize().x - size->x) / 3.2f,
 		(window.getSize().y - size->y) / 2.0f);
 
 	for (int i = 0; i < GRID_SIZE; ++i) {
@@ -29,6 +29,7 @@ Grid::Grid(const sf::RenderWindow& window) {
 	movedBox = new sf::Vector2i;
 	sound = new sf::Sound;
 	state =  GRID_STATE::NUL;
+	points = 0;
 }
 
 Grid::~Grid() {
@@ -196,6 +197,7 @@ GRID_STATE Grid::StateProcessing(GRID_STATE _state) {
 			break;
 		case FIND_MATCH:
 			this->FindingMatch();
+			points = this->MatchCount();
 			_state = GRID_STATE::SHIFT_LINES;
 			break;
 		case SHIFT_LINES:
@@ -250,8 +252,7 @@ DIRECTION Grid::IdentifyDirection(int x, int y) {
 void Grid::SwapCells(OpenBox& first, OpenBox& second) {
 	int value1 = first.GetValue();
 	int value2 = second.GetValue();
-	std::cout << "#swap" << std::endl;
-
+	
 	sf::Sprite s1 = first.GetSprite();
 	sf::Sprite s2 = second.GetSprite();
 	first.SetSprite(s2);
@@ -340,4 +341,18 @@ void Grid::CellDistribute() {
 			}
 		}
 	}
+}
+
+unsigned Grid::MatchCount() {
+	unsigned res = 0;
+	for (int i = 0; i < GRID_SIZE; ++i) {
+		for (int j = 0; j < GRID_SIZE; ++j) {
+			res += cells[i][j].GetPoint();
+		}
+	}
+	return res;
+}
+
+unsigned Grid::GetPointsValue() {
+	return points;
 }

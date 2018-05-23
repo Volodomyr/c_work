@@ -18,6 +18,7 @@ OpenBox::OpenBox(): Box() {
 	animPlaying = false;
 	playSoundMove = false;
 	sound = new sf::Sound;
+	points = 0;
 }
 
 OpenBox::~OpenBox() {
@@ -54,6 +55,7 @@ void OpenBox::AnimationController() {
 		animPlaying = true;
 		sound->setBuffer(resMng->getSound("cell_destroy"));
 		sound->play();
+		points++;
 	}
 	if (!value) {
 		if (animation && !animation->GetSpeed()) {

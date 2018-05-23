@@ -6,10 +6,25 @@
 #include "Grid.hpp"
 #include "Background.hpp"
 #include "Text.hpp"
+#include <fstream>
+#include <sstream>
+#include "StateControl.hpp"
+const float TIME_MAX = 3; //minutes
+const unsigned FONT_SIZE = 16;
+const unsigned SCORE_FOR_CELL = 15;
 
 class GameState : public State {
 	Grid *grid;
-	Text *score;
+	Text *scoreText;
+	Text *maxScoreText;
+	Text *timerText;
+	unsigned scoreValue;
+	unsigned maxScore;
+	sf::Clock timer;
+	sf::RectangleShape *textBlock;
+	bool gamePlay;
+	bool valueFixed;
+	Text *textEnd;
 
 public:
 	GameState(sf::RenderWindow& _window);

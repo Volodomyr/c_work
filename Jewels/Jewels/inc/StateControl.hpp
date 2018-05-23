@@ -10,7 +10,7 @@ enum STATE {
 	PLAY = 1,
 	PAUSE,
 	MENU,
-	SETTINGS,
+	INFO,
 	CLOSE
 }; // состояния игры
 

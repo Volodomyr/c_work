@@ -1,9 +1,9 @@
 #include "..\inc\Text.hpp"
 
 Text::Text() {
-	value = "m_text";
+	value = "";
 	text = new sf::Text;
-	text->setString(value);
+	text->setString(value.c_str());
 	text->setFont(resMng->getFont("helsinki"));
 	text->setCharacterSize(DEFAULT_CHAR_SIZE);
 
@@ -13,10 +13,9 @@ Text::Text() {
 Text::Text(const std::string& _value, unsigned size) {
 	value = _value;
 	text = new sf::Text;
-	text->setString(value);
+	text->setString(value.c_str());
 	text->setFont(resMng->getFont("helsinki"));
 	text->setCharacterSize(size);
-	text->setOutlineThickness(1);
 
 	position = new sf::Vector2f;
 }
@@ -28,6 +27,7 @@ Text::~Text() {
 
 void Text::SetString(const std::string& _value) {
 	value = _value;
+	this->Update();
 }
 
 void Text::SetCharacterSize(unsigned int size) {
@@ -55,7 +55,7 @@ void Text::Draw(sf::RenderWindow& window) {
 }
 
 void Text::Update() {
-	text->setString(value);
+	text->setString(value.c_str());
 }
 
 void Text::SetPosition(const sf::Vector2f& _position) {
@@ -63,6 +63,25 @@ void Text::SetPosition(const sf::Vector2f& _position) {
 	text->setPosition(*position);
 }
 
+std::string Text::ToString(unsigned value)
+{
+	std::ostringstream ostream;
+	ostream << value << std::ends;
+	return ostream.str();
+}
+
 sf::Vector2f Text::GetPosition() {
 	return *position;
+}
+
+sf::FloatRect Text::GetRect() {
+	return text->getGlobalBounds();
+}
+
+void Text::SetColor(const sf::Color& color) {
+	text->setFillColor(color);
+}
+
+void Text::SetThickness(float thickness) {
+	text->setOutlineThickness(thickness);
 }

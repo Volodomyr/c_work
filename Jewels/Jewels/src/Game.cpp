@@ -13,7 +13,7 @@ Game::Game() {
 	
 	main_state.SetWindow(gameWindow);
 	main_state.SwitchState(STATE::MENU);
-	debugMode = true;
+	debugMode = false;
 }
 
 void Game::Run() {

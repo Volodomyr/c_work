@@ -4,7 +4,9 @@
 #include <string>
 #include <SFML\Graphics.hpp>
 #include "ResourceManager.hpp"
-const unsigned DEFAULT_CHAR_SIZE = 25;
+#include <sstream>
+#include <string>
+const unsigned DEFAULT_CHAR_SIZE = 16;
 
 class Text {
 	std::string value;
@@ -19,16 +21,17 @@ public:
 	void SetCharacterSize(unsigned int size);
 	void SetFont(const sf::Font& font);
 	void SetPosition(const sf::Vector2f& _position);
+	void SetColor(const sf::Color& color);
+	void SetThickness(float thickness);
 
+	static std::string ToString(unsigned value);
 	sf::Vector2f GetPosition();
 	std::string GetString();
 	unsigned int GetCharacterSize();
 	sf::Font GetFont();
-	void Draw(sf::RenderWindow& window);
+	sf::FloatRect GetRect();
+	virtual void Draw(sf::RenderWindow& window);
 	void Update();
 };
 
-
-
-
-#endif
+#endif //TEXT_H

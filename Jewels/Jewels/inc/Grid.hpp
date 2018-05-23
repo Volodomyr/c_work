@@ -25,8 +25,6 @@ class Grid {
 	sf::Vector2i *markedBox;
 	sf::Vector2i *movedBox;
 	sf::Sound *sound;
-
-
 	Box *bound;
 	size_t rows;
 	size_t cols;
@@ -34,6 +32,7 @@ class Grid {
 	bool cellSwap;
 	GRID_STATE state;
 	std::vector< std::vector<OpenBox> > cells;
+	unsigned points;
 
 	bool AllowedMove(int x, int y);
 	DIRECTION IdentifyDirection(int x, int y);
@@ -44,9 +43,8 @@ class Grid {
 	int RandomValue(int v1, int v2 = 0);
 	void SwapValues(OpenBox& first, OpenBox& second);
 	GRID_STATE StateProcessing(GRID_STATE _state);
-	bool ConsistMatch(Matrix& _cells);
 	bool isCorrectIndex(size_t index, size_t max);
-	
+	unsigned MatchCount();
 
 public:
 	Grid(const sf::RenderWindow& window);
@@ -54,8 +52,13 @@ public:
 	void Generate();
 	void DeleteCopies();
 	void CellDistribute();
+	bool ConsistMatch(Matrix& _cells);
+	
+	unsigned GetPointsValue();
 	void Update(sf::RenderWindow& window, float _time);
 	void Draw(sf::RenderWindow& window);
+	sf::Vector2f GetPosition() { return cells[0][0].GetPosition(); }
+	Matrix GetCells() { return cells; }
 
 };
 

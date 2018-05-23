@@ -6,7 +6,7 @@ void nop() {
 }
 
 MenuState::MenuState(sf::RenderWindow& window) {
-	std::string titleArr[] = { "PLAY", "OPTIONS", "ACHIEVEMENTS", "INFO", "QUIT" };
+	std::string titleArr[] = { "PLAY", "INFORMATION", "QUIT" };
 	Button temp[BTN_COUNT];
 
 	size = new sf::Vector2f;
@@ -15,7 +15,7 @@ MenuState::MenuState(sf::RenderWindow& window) {
 
 	pos = new sf::Vector2f;
 	*pos = sf::Vector2f((window.getSize().x - this->size->x) / 2.0f,
-		(window.getSize().y - this->size->y) / 2.0f + 0.07f * window.getSize().y);
+		(window.getSize().y - this->size->y) / 2.0f);
 
 	menu_panel = new sf::RectangleShape();
 	menu_panel->setFillColor(sf::Color(150, 150, 150, 0));
@@ -37,7 +37,10 @@ MenuState::MenuState(sf::RenderWindow& window) {
 	temp[0].SetFunction([this]() { //define func for button 'Play'
 		main_state.SwitchState(STATE::PLAY);
 	});
-	temp[4].SetFunction([this]() { //define func for button 'Exit'
+	temp[1].SetFunction([this]() { //define func for button 'Play'
+		main_state.SwitchState(STATE::INFO);
+	});
+	temp[2].SetFunction([this]() { //define func for button 'Exit'
 		main_state.SwitchState(STATE::CLOSE);
 	});
 

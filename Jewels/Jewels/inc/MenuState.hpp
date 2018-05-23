@@ -10,14 +10,7 @@
 #include <iostream>
 #include "Background.hpp"
 
-enum Item {
-	START, 
-	OPTIONS, 
-	ACHIEVEMENTS, 
-	INFORMATION, 
-	EXIT 
-};
-const size_t BTN_COUNT = 5; //количество кнопок
+const size_t BTN_COUNT = 3; //количество кнопок
 const size_t BTN_SPACE = 18; // расстояние между кнопками
 const size_t OFFSET = 20;
 

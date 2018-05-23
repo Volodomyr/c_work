@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inc\InfoState.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationManager.cpp" />
     <ClCompile Include="src\Background.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="inc\Game.hpp" />
     <ClInclude Include="inc\GameState.hpp" />
     <ClInclude Include="inc\Grid.hpp" />
+    <ClInclude Include="inc\InfoState.hpp" />
     <ClInclude Include="inc\MenuState.hpp" />
     <ClInclude Include="inc\OpenBox.hpp" />
     <ClInclude Include="inc\Resource.hpp" />

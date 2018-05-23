@@ -5,6 +5,7 @@
 #include "State.hpp"
 #include "GameState.hpp"
 #include "MenuState.hpp"
+#include "InfoState.hpp"
 
 enum STATE {
 	PLAY = 1,

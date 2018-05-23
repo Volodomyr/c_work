@@ -64,5 +64,8 @@ void StateControl::SwitchState(const STATE& new_state) {
 		case MENU:
 			curr_state = new MenuState(*this->window);
 			break;
+		case INFO:
+			curr_state = new InfoState(*this->window);
+			break;
 	}
 }

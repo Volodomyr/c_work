@@ -34,15 +34,15 @@ GameState::GameState(sf::RenderWindow& _window) {
 	std::ostringstream os;
 	os << timer.getElapsedTime().asSeconds() << std::ends;
 
-	timerText = new Text("Lost time: " + os.str(), FONT_SIZE);
+	timerText = new Text("Time left: " + os.str(), FONT_SIZE);
 	timerText->SetPosition(sf::Vector2f(textBlock->getPosition().x + textBlock->getSize().x / 6.0f,
 		textBlock->getPosition().y + textBlock->getSize().y * 2.15f / 6.0f));
 
 
 	timer.restart();
 	gamePlay = true;
-	textEnd = new Text("Game over!!!",60);
-	textEnd->SetColor(sf::Color::Cyan);
+	textEnd = new Text("Time's up!!!",60);
+	textEnd->SetColor(sf::Color::Red);
 	textEnd->SetThickness(2);
 	textEnd->SetPosition(sf::Vector2f(_window.getSize().x / 2.0f - textEnd->GetRect().width / 2.0f,
 					    _window.getSize().y / 2.0f - textEnd->GetRect().height / 2.0f));
@@ -75,7 +75,7 @@ void GameState::Update(sf::RenderWindow& window, float _time) {
 				_null = "0";
 			}
 			os << diff_time / 60 << ":" << _null << diff_time % 60 << std::ends;
-			timerText->SetString("Lost time:  " + os.str());
+			timerText->SetString("Time left:  " + os.str());
 		}
 		else {
 			gamePlay = false;
